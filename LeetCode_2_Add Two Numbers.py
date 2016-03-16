@@ -11,42 +11,48 @@ class Solution(object):
         :type l2: ListNode
         :rtype: ListNode
         """
-        notEndL1 = 1
-        notEndL2 = 1
+        notEndL1 = True
+        notEndL2 = True
         iter1 = l1
         iter2 = l2
-        carry = 0
         
         # Set up first node
-        rNode = ListNode(0)
-        t = iter1.val*notEndL1 + iter2.val*notEndL2 + carry
-        carry = t // 10
-        rNode.val = t % 10
-        rNode.next = None
+        t = iter1.val + iter2.val
+        if t > 9:
+            carry = 1
+            rNode = ListNode(t - 10)
+        else:
+            carry = 0
+            rNode = ListNode(t)
         if iter1.next:
             iter1 = iter1.next
         else:
-            notEndL1 = 0
+            notEndL1 = False
         if iter2.next:
             iter2 = iter2.next
         else:
-            notEndL2 = 0
+            notEndL2 = False
         # Rnode's iterator 
         iterR = rNode
         
         while notEndL1 or notEndL2 or carry:
-            t = iter1.val*notEndL1 + iter2.val*notEndL2 + carry
-            carry = t // 10
-            newNode = ListNode(t % 10)
-            newNode.next = None
+            t = carry + iter1.val if notEndL1 else carry
+            if notEndL2:
+                t += iter2.val
+            if t > 9:
+                carry = 1
+                newNode = ListNode(t - 10)
+            else:
+                carry = 0
+                newNode = ListNode(t)
             iterR.next = newNode
             iterR = newNode
             if iter1.next:
                 iter1 = iter1.next
             else:
-                notEndL1 = 0
+                notEndL1 = False
             if iter2.next:
                 iter2 = iter2.next
             else:
-                notEndL2 = 0
+                notEndL2 = False
         return rNode
