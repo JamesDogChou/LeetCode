@@ -4,27 +4,19 @@ class Solution(object):
         :type s: str
         :rtype: int
         """
-        MaxLen = 0
-        dictLastAppear = {}
+        MaxLen = 0          # The answer
+        dictLastAppear = {} # Record each character's last appear position
         lenStr = len(s)
+        basePos = 0         # The base position to compute the max length
         for i in xrange(0, lenStr):
-            tempCheck = dictLastAppear.get(s[i], -1)
-            if tempCheck > 0:
-                for k, v in dictLastAppear.iteritems():
-                    if v >= 0 and v < tempCheck:
-                        dictLastAppear[k] = -1
-                        tempMax = i - v
-                        if tempMax > MaxLen:
-                            MaxLen = tempMax
+            # Check if there is a same character before
+            tempCheck = dictLastAppear.get(s[i], None)
+            if tempCheck != None:
+                # Update the current base position to the right-most and non-repeat position
+                basePos = max(basePos, tempCheck + 1)
+            # Update the character position
             dictLastAppear[s[i]] = i
-                        
-        
-        for k, v in dictLastAppear.iteritems():
-            if v >= 0:
-                finalLen = lenStr - v
-            else:
-                continue
-            if finalLen > MaxLen:
-                MaxLen = finalLen
+            # Update the answer if current non-repeat length is longer
+            MaxLen = max(MaxLen, i - basePos + 1)
         
         return MaxLen
