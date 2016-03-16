@@ -12,11 +12,12 @@ class Solution(object):
             # Check if there is a same character before
             tempCheck = dictLastAppear.get(s[i], None)
             if tempCheck != None:
+                # Update the answer if current non-repeat length is longer
+                MaxLen = max(MaxLen, i - basePos)
                 # Update the current base position to the right-most and non-repeat position
                 basePos = max(basePos, tempCheck + 1)
             # Update the character position
             dictLastAppear[s[i]] = i
-            # Update the answer if current non-repeat length is longer
-            MaxLen = max(MaxLen, i - basePos + 1)
-        
+        # Last Check
+        MaxLen = max(MaxLen, lenStr - basePos)
         return MaxLen
